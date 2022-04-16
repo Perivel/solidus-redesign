@@ -99,4 +99,4 @@ export default MyComponent;
 The `useIsServer()` and `useIsClient()` primitives are used to determine if we are currently running on the client or on the server.
 
 # License
-SolidusJS is provided under the [BSD-2](LICENSE) License.
+SolidusJS is provided under the [MIT](LICENSE) License.
