@@ -6,11 +6,11 @@ Solidus is a plug-and-play Server-Side Rendering solution for SolidJS. With Soli
 ## Installation
 To install Solidus, add the dependencies with NPM:
 ```
-npm i solidus-js
+npx create-solidus-app <my-app>
 ```
 or with Yarn:
 ```
-yarn add solidus-js
+yarn create solidus-app <my-app>
 ```
 
 ## Assumptions
