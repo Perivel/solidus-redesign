@@ -24,7 +24,7 @@ Solidus expects your server entry point to be contained in `src/server.ts`. Belo
 
 ```ts
 // src/server.ts
-import { runServer } from 'solidus-js/server';
+import { runServer } from '@solidus-js/server';
 import MyApp from 'path/to/root/component/MyApp';
 import config from 'path/to/solidus/config';
 
@@ -36,7 +36,7 @@ The `runServer()` function starts the application server using your root compone
 Solidus expects your client entry point to be contained in `src/client.ts`. Below is an example of a typical Solidus client entry point file.
 
 ```ts
-import { runClient } from 'solidus-js/client';
+import { runClient } from '@solidus-js/client';
 import MyApp from './MyApp';
 import config from './solidus.config';
 
@@ -54,7 +54,7 @@ The `useServer()` primitive will give you access to the server request informati
 ```ts
 // App,tsx
 import { Component } from 'solid-js';
-import { useServer } from 'solidus-js';
+import { useServer } from '@solidus-js/utilities';
 import { Router, useRoutes } from 'solid-app-router';
 import { routes } from './routes';
 
@@ -79,7 +79,7 @@ Suppose we have an `<Inspect>` componet which lets us inspect our app's HTML dur
 ```ts
 // MyComponent.tsx
 import { Component } from 'solid-js';
-import { useEnvironment } from 'solidus-js';
+import { useEnvironment } from '@solidus-js/utilities';
 import Inspect from './Inspect';
 
 const MyComponent: Component = () => {
