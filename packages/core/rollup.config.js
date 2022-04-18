@@ -7,6 +7,9 @@ import babel from "@rollup/plugin-babel";
 import del from 'rollup-plugin-delete';
 import { camelCase } from 'change-case';
 import { dependencies } from './package.json';
+import commonjs from '@rollup/plugin-commonjs';
+import hashbangPlugin from "rollup-plugin-hashbang";
+import nodePolyfillPlugin from "rollup-plugin-polyfill-node";
 
 const deps = Object.keys(dependencies);
 
@@ -110,5 +113,25 @@ export default [
             }),
         ],
         treeshake: false
+    },
+     // CLI
+     {
+        input: resolve(__dirname, "cli/index.ts"),
+        external: externals,
+        output: [
+            {
+                file: "./dist/bin/solidus.js",
+                format: "esm",
+                globals: globals,
+            },
+        ],
+        plugins: [
+            nodePolyfillPlugin(),
+            typescriptPlugin(tsPluginOptions),
+            commonjs(),
+            jsonPlugin(),
+            hashbangPlugin(),
+            terser(),
+        ],
     },
 ];
