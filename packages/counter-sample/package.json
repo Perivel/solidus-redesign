@@ -1,0 +1,21 @@
+{
+  "name": "counter-sample",
+  "version": "0.1.0",
+  "description": "An example counter app to demonstrate SolidusJS.",
+  "scripts": {
+    "start": "solidus start",
+    "dev": "solidus dev",
+    "buildd": "solidus build"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "@solidus-js/client": "^0.1.0",
+    "@solidus-js/core": "^0.1.0",
+    "@solidus-js/server": "^0.1.0",
+    "@solidus-js/utilities": "^0.1.0",
+    "solid-js": "^1.3.13"
+  }
+}
