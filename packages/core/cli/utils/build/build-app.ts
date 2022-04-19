@@ -236,7 +236,7 @@
          output: [
              {
                  file: Path.FromSegments(outputDir, 'index.js').toString(),
-                 format: 'esm',
+                 format: 'es',
                  globals: globals,
              }
          ],
@@ -249,7 +249,7 @@
                  extensions: [".js", ".jsx", ".ts", ".tsx"],
                  mainFields: ['main', 'module', 'browser', 'exports'],
                  rootDir: root.toString(),
-                 moduleDirectories: [Path.FromSegments(root, 'src').toString()]
+                 moduleDirectories: [Path.FromSegments(root, 'src').toString()],
              }),
              typescript(tsPluginOptions),
              commonjs(),
@@ -272,11 +272,11 @@
          output: [
              {
                  file: Path.FromSegments(outputDir, 'public/scripts/client.js').toString(),
-                 format: 'esm',
+                 format: 'es',
                  globals: globals,
              },
          ],
-         //external: externals,
+         external: externals,
          plugins: [
              nodePolyfill(),
              nodeResolve({
@@ -288,9 +288,7 @@
                  browser: true,
              }),
              typescript(tsPluginOptions),
-             commonjs({
-                 include: Path.FromSegments(root, 'node_modules/**').toString()
-             }),
+             commonjs(),
              babel({
                  babelHelpers: "bundled",
                  presets: [["solid", { generate: "dom", hydratable: true }]],

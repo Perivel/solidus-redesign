@@ -16,7 +16,8 @@ const deps = Object.keys(dependencies);
 // core library external dependencies.
 const externals = [
     ...deps,
-    'solid-js/web'
+    'solid-js/web',
+    'child_process'
 ];
 
 // core library globals.
