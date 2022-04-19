@@ -1,12 +1,17 @@
 import type { Component } from 'solid-js';
+import { useServer, useEnvironment, useIsClient, useIsServer } from '@solidus-js/utilities';
 
 const App: Component = () => {
+  const server = useServer();
+  const env = useEnvironment();
+  const isClient = useIsClient();
+  const isServer = useIsServer();
   return (
     <div class="App">
       <header class="header">
         <img src='./logo.svg' class="logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          URL: {server()?.url} Environment: {env()} Client: {isClient() ? "true" : "false"} Server: {isServer() ? "true" : "false"}
         </p>
         <a
           class="link"
