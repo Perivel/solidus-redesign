@@ -1,5 +1,6 @@
 import type { Component } from 'solid-js';
 import { useServer, useEnvironment, useIsClient, useIsServer } from '@solidus-js/utilities';
+import { Title } from 'solid-meta';
 
 const App: Component = () => {
   const server = useServer();
@@ -7,6 +8,8 @@ const App: Component = () => {
   const isClient = useIsClient();
   const isServer = useIsServer();
   return (
+    <>
+    <Title>Foo</Title>
     <div class="App">
       <header class="header">
         <img src='./logo.svg' class="logo" alt="logo" />
@@ -23,6 +26,7 @@ const App: Component = () => {
         </a>
       </header>
     </div>
+    </>
   );
 };
 
