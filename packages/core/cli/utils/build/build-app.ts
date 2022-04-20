@@ -201,7 +201,8 @@
          '@solidus-js/core',
          '@solidus-js/client',
          '@solidus-js/server',
-         '@solidus-js/utilities'
+         '@solidus-js/utilities',
+         'solid-js/web'
      ];
      const fmt = container.get(StringFormatter);
  
@@ -213,6 +214,7 @@
      globals['@solidus-js/client'] = fmt.camelCase('@solidus-js/client');
      globals['@solidus-js/server'] = fmt.camelCase('@solidus-js/server');
      globals['@solidus-js/utilities'] = fmt.camelCase('@solidus-js/utilities');
+     globals['solid-js/web'] = fmt.camelCase('solid-js/web');
  
      const tsConfigOverrides = {
          declaration: true,
@@ -273,26 +275,19 @@
              {
                  file: Path.FromSegments(outputDir, 'public/scripts/client.js').toString(),
                  format: 'es',
-                 //globals: globals,
              },
          ],
-         //external: externals,
          plugins: [
              nodePolyfill(),
              nodeResolve({
-                 //preferBuiltins: true,
                  exportConditions: ["solid"],
                  extensions: [".js", ".jsx", ".ts", ".tsx"],
-                 //moduleDirectories: [Path.FromSegments(root, 'src').toString()],
-                 //rootDir: root.toString(),
-                 //browser: true,
              }),
              typescript(tsPluginOptions),
              commonjs(),
              babel({
                  babelHelpers: "bundled",
                  presets: [["solid", { generate: "dom", hydratable: true }]],
-                 //exclude: "node_modules/**",
                  extensions: [".js", ".jsx", ".ts", ".tsx"],
              }),
              json(),

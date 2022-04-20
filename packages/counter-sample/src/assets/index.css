@@ -36,6 +36,12 @@ body {
   .link {
     color: #b318f0;
   }
+
+  .btn {
+    background-color: #b318f0;
+    color: white;
+
+  }
   
   @keyframes logo-spin {
     from {

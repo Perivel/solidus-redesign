@@ -6,7 +6,7 @@
   "scripts": {
     "start": "solidus start",
     "dev": "solidus dev",
-    "build": "solidus build"
+    "build:app": "solidus build"
   },
   "license": "MIT",
   "devDependencies": {
@@ -17,6 +17,7 @@
     "@solidus-js/core": "^0.1.0",
     "@solidus-js/server": "^0.1.0",
     "@solidus-js/utilities": "^0.1.0",
-    "solid-js": "^1.3.13"
+    "solid-js": "^1.3.13",
+    "solid-meta": "^0.27.3"
   }
 }
