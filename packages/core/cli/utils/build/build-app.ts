@@ -273,26 +273,26 @@
              {
                  file: Path.FromSegments(outputDir, 'public/scripts/client.js').toString(),
                  format: 'es',
-                 globals: globals,
+                 //globals: globals,
              },
          ],
-         external: externals,
+         //external: externals,
          plugins: [
              nodePolyfill(),
              nodeResolve({
-                 preferBuiltins: true,
+                 //preferBuiltins: true,
                  exportConditions: ["solid"],
                  extensions: [".js", ".jsx", ".ts", ".tsx"],
-                 moduleDirectories: [Path.FromSegments(root, 'src').toString()],
-                 rootDir: root.toString(),
-                 browser: true,
+                 //moduleDirectories: [Path.FromSegments(root, 'src').toString()],
+                 //rootDir: root.toString(),
+                 //browser: true,
              }),
              typescript(tsPluginOptions),
              commonjs(),
              babel({
                  babelHelpers: "bundled",
                  presets: [["solid", { generate: "dom", hydratable: true }]],
-                 exclude: "node_modules/**",
+                 //exclude: "node_modules/**",
                  extensions: [".js", ".jsx", ".ts", ".tsx"],
              }),
              json(),
@@ -300,7 +300,7 @@
              image(),
          ],
          preserveEntrySignatures: false,
-         treeshake: true,
+         treeshake: false,
      };
  
      return [clientConfig, serverConfig];
