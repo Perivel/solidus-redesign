@@ -74,14 +74,6 @@
       */
  
      ssr: SSRMode;
- 
-     /**
-      * title
-      *
-      * A Default title to set.
-      */
- 
-     title: string;
  }
  
  /**

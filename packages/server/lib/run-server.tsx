@@ -49,8 +49,10 @@ export const runServer = (
 
   // register the initial route.
   app.get("*", async (req, res) => {
+
+    // we preepare the root component to be rendered.
     const tags: TagDescription[] = [];
-    const RootComponent: Component = (props) => {
+    const RootComponent: Component = () => {
       return <Capsule url={req.url} env={config.env} tags={tags}>
         <App />
       </Capsule>
@@ -71,6 +73,8 @@ export const runServer = (
           // set up standard ssr.
           page = renderToString(() => <RootComponent />);
         }
+
+        // we return the rendered application.
         res.status(200).send(`
          <!doctype html>
          <html lang=${config.lang}>
@@ -86,7 +90,6 @@ export const runServer = (
              type="image/ico"
              href="favicon.ico"
            />
-           <title>${config.title}</title>
             ${generateHydrationScript()}
             ${renderTags(tags)}
            </head>

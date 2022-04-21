@@ -45,6 +45,6 @@ export class Logger implements LoggerInterface {
     }
 
     private formatMessage(message: string): string {
-        return `[${DateTime.Now().toString()}]${message.trim()}`;
+        return `[${DateTime.Now().toString()}]: ${message.trim()}`;
     }
 }

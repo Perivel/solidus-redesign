@@ -6,5 +6,4 @@ export default <Configuration>{
     host: 'localhost',
     lang: 'en',
     ssr: 'async',
-    title: "SolidusJS Counter"
 };
