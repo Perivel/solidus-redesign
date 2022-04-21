@@ -1,10 +1,10 @@
 # SolidusJS
-Solidus is a plug-and-play Server-Side Rendering solution for SolidJS. With Solidus, you can easily add Server-Side Rendering to any existing SolidJS application with minimal effort.
+Solidus is a plug-and-play Server-Side Rendering solution for SolidJS written in TypeScript.
 
-> **Note**: SolidusJS is still under development. Some features may not work yet.
+> **Note**: This repository will eventually be merged with the [Main SolidusJS Repository](https://github.com/Perivel/solidus-js) upon completion of the [SolidHack](https://hack.solidjs.com/) hackathon. We are just continuing work in this repository because the main repository cannot be updated during the voting period of the Hackathon. 
 
 ## Installation
-To install Solidus, add the dependencies with NPM:
+SolidusJS is still not yet released. However, when we do release it, you'll be able to follow the below instructions to begin using Solidus.
 ```
 npx create-solidus-app <my-app>
 ```
@@ -14,7 +14,7 @@ yarn create solidus-app <my-app>
 ```
 
 ## Assumptions
-SolidusJS assumes all your public assets will be located in your project's `src/assets` directory.
+SolidusJS assumes all your public assets will be located in your project's `src/assets` directory. In addition, SolidusJS assunes that our client entrypoint is located in `root/src/client.ts`. And, your server entrypoint is located in `root/src/server.ts`. 
 
 ## Usage
 In order to run your application, you need to define a server entrypoint and a client entrypoint. There are two special files Solidus will look for in order to run your application.
