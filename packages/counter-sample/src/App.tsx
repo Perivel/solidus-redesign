@@ -1,33 +1,28 @@
-import { Component, createSignal } from 'solid-js';
-import { useServer, useEnvironment, useIsClient, useIsServer } from '@solidus-js/utilities';
-import { Title } from 'solid-meta';
+import { Component } from 'solid-js';
+import { useServer } from '@solidus-js/utilities';
+import { useRoutes, Router, RouteDefinition } from 'solid-app-router';
+import Home from './Home';
+import About from './About';
 
 const App: Component = () => {
-  const [count, setCount] = createSignal(0);
+  const routes: RouteDefinition[] = [
+    {
+      path: '/',
+      component: Home
+    },
+    {
+      path: '/about',
+      component: About
+    }
+  ];
 
-  const increment = () => setCount(count() + 1);
-  const decrement = () => setCount(count() - 1);
+  const server = useServer();
+  const Routes = useRoutes(routes);
 
   return (
-    <>
-    <Title>Foo</Title>
-    <div class="App">
-      <header class="header">
-        <img src='./logo.svg' class="logo" alt="logo" />
-        <p>Count: {count()}</p>
-        <button class="btn" onClick={increment}>Increment</button>
-        <button class="btn" onClick={decrement}>Decrement</button>
-        <a
-          class="link"
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
-      </header>
-    </div>
-    </>
+    <Router url={server()?.url}>
+      <Routes />
+    </Router>
   );
 };
 

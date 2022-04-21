@@ -24,7 +24,7 @@
  }
  
  interface CapsuleProps {
-     url: string;
+     url?: string;
      env: Env;
      tags: TagDescription[];
  }

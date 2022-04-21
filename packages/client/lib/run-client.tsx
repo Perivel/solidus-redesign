@@ -15,9 +15,9 @@ import { useServer } from '@solidus-js/utilities';
 export const runClient = (App: Component, config: Configuration = {}): () => void => {
     const appConfig = resolveConfig(config);
     const server = useServer();
-    const ClientComponent = () => <Capsule url={server()?.url || '/'} tags={[]} env={appConfig.env!}>
+    const ClientComponent = () => <Capsule url={server()?.url} tags={[]} env={appConfig.env!}>
         <App />
     </Capsule>;
     
-    return hydrate(() => <ClientComponent />, document);
+    return hydrate(() => <ClientComponent />, document.getElementById('root') as HTMLElement);
 }

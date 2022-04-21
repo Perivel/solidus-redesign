@@ -203,18 +203,18 @@
          '@solidus-js/server',
          '@solidus-js/utilities',
          'solid-js/web'
-     ];
+     ].filter(dep => dep !== 'solid-app-router');
      const fmt = container.get(StringFormatter);
  
-     const globals: Record<string, string> = {};
-     deps.forEach(dep => {
-         globals[dep] = fmt.camelCase(dep);
-     });
-     globals['@solidus-js/core'] = fmt.camelCase('@solidus-js/core');
-     globals['@solidus-js/client'] = fmt.camelCase('@solidus-js/client');
-     globals['@solidus-js/server'] = fmt.camelCase('@solidus-js/server');
-     globals['@solidus-js/utilities'] = fmt.camelCase('@solidus-js/utilities');
-     globals['solid-js/web'] = fmt.camelCase('solid-js/web');
+    //  const globals: Record<string, string> = {};
+    //  deps.forEach(dep => {
+    //      globals[dep] = fmt.camelCase(dep);
+    //  });
+    //  globals['@solidus-js/core'] = fmt.camelCase('@solidus-js/core');
+    //  globals['@solidus-js/client'] = fmt.camelCase('@solidus-js/client');
+    //  globals['@solidus-js/server'] = fmt.camelCase('@solidus-js/server');
+    //  globals['@solidus-js/utilities'] = fmt.camelCase('@solidus-js/utilities');
+    //  globals['solid-js/web'] = fmt.camelCase('solid-js/web');
  
      const tsConfigOverrides = {
          declaration: true,
@@ -239,19 +239,15 @@
              {
                  file: Path.FromSegments(outputDir, 'index.js').toString(),
                  format: 'es',
-                 globals: globals,
+                 //globals: globals,
              }
          ],
          external: externals,
          plugins: [
              nodePolyfill(),
              nodeResolve({
-                 preferBuiltins: true,
                  exportConditions: ["solid"],
                  extensions: [".js", ".jsx", ".ts", ".tsx"],
-                 mainFields: ['main', 'module', 'browser', 'exports'],
-                 rootDir: root.toString(),
-                 moduleDirectories: [Path.FromSegments(root, 'src').toString()],
              }),
              typescript(tsPluginOptions),
              commonjs(),

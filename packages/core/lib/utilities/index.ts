@@ -48,8 +48,7 @@ export const resolveConfig = (config: Configuration): Configuration => {
     const lang = config.lang || 'en';
   
     // ssr
-    const ssrValues = ['ssr', 'async', 'stream'];
-    const ssr = config.ssr || 'ssr' as SSRMode;
+    const ssr = config.ssr || 'sync' as SSRMode;
   
     return {
       env: env as Env,

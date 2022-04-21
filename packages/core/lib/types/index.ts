@@ -83,5 +83,5 @@
   */
  
  export interface ServerRequest {
-     url: string;
+     url?: string;
  }

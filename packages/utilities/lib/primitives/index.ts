@@ -6,8 +6,7 @@
 
 import {
     Accessor,
-    createSignal,
-    createEffect,
+    createSignal
 } from 'solid-js';
 import { isServer } from 'solid-js/web';
 import {
@@ -16,6 +15,31 @@ import {
     Env,
     ServerRequest
 } from '@solidus-js/core';
+
+/**
+ * onServerRender()
+ * 
+ * onServerRender() executes a function fn on the initial server render only.
+ * @param fn the function to execute.
+ * @param onError an optional function to execute when there is an error.
+ * @note It turns out createEffect() is only available in the client side. so, we need to find some workaround to make something that works on the server side.
+ */
+
+// export const onServerRender = (
+//     fn: () => Promise<void>,
+//     onError = (e: Error) => {},
+// ): void => {
+//     createEffect(async () => {
+//         if (isServer) {
+//             try {
+//                 await fn();
+//             }
+//             catch(e) {
+//                 onError(e as Error);
+//             }
+//         }
+//     });
+// }
 
 /**
  * useServer()
