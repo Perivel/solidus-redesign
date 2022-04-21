@@ -63,7 +63,7 @@ const App: Component = () => {
     const Routes = useRoutes(routes);
 
     return (
-        <Router url={server().url}>
+        <Router url={server()?.url}>
             <Routes />
         </Router>
     );

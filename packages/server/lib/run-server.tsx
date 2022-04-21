@@ -17,7 +17,6 @@ import { renderTags } from "solid-meta";
 import {
   Capsule,
   Configuration,
-  Env,
   TagDescription,
   resolveConfig
 } from "@solidus-js/core";
@@ -56,7 +55,7 @@ export const runServer = (
     // we preepare the root component to be rendered.
     const tags: TagDescription[] = [];
     const RootComponent: Component = () => {
-      return <Capsule url={req.url} env={appConfig.env!} tags={tags}>
+      return <Capsule url={req.url} ip={req.ip} env={appConfig.env!} tags={tags}>
         <App />
       </Capsule>
     }

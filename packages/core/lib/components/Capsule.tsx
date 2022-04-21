@@ -25,6 +25,7 @@
  
  interface CapsuleProps {
      url?: string;
+     ip?: string;
      env: Env;
      tags: TagDescription[];
  }
@@ -37,7 +38,7 @@
  
  const Capsule: Component<CapsuleProps> = (props) => {
      setEnvironment(props.env);
-     setServerRequest({ url: props.url });
+     setServerRequest({ url: props.url, ip: props.ip });
      return <MetaProvider tags={props.tags}>{props.children}</MetaProvider>;
  };
 
