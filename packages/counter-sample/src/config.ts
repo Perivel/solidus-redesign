@@ -5,5 +5,5 @@ export default <Configuration>{
     port: 5000,
     host: 'localhost',
     lang: 'en',
-    ssr: 'async',
+    ssr: 'stream',
 };

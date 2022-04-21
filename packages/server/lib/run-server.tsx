@@ -17,7 +17,9 @@ import { renderTags } from "solid-meta";
 import {
   Capsule,
   Configuration,
-  TagDescription
+  Env,
+  TagDescription,
+  resolveConfig
 } from "@solidus-js/core";
 import { Middleware } from "./middlewate";
 
@@ -33,10 +35,11 @@ import { Middleware } from "./middlewate";
 
 export const runServer = (
   App: Component,
-  config: Configuration,
+  config: Configuration = {},
   middleware: Middleware[] = []
 ): void => {
   const app = express();
+  const appConfig = resolveConfig(config);
 
   // set middleware
   if (middleware.length > 0) {
@@ -53,12 +56,12 @@ export const runServer = (
     // we preepare the root component to be rendered.
     const tags: TagDescription[] = [];
     const RootComponent: Component = () => {
-      return <Capsule url={req.url} env={config.env} tags={tags}>
+      return <Capsule url={req.url} env={appConfig.env!} tags={tags}>
         <App />
       </Capsule>
     }
 
-    if (config.ssr === "stream") {
+    if (appConfig.ssr! === "stream") {
       // set up streaming ssr.
       renderToStream(() => <RootComponent />).pipe(res);
     } else {
@@ -66,7 +69,7 @@ export const runServer = (
       try {
         let page: string;
 
-        if (config.ssr === "async") {
+        if (appConfig.ssr! === "async") {
           // set up async ssr.
           page = await renderToStringAsync(() => <RootComponent />);
         } else {
@@ -77,10 +80,10 @@ export const runServer = (
         // we return the rendered application.
         res.status(200).send(`
          <!doctype html>
-         <html lang=${config.lang}>
+         <html lang=${appConfig.lang!}>
            <head>
            <link rel="stylesheet" href="index.css" />
-           <meta charset=${config.charset} />
+           <meta charset=${appConfig.charset!} />
            <meta
              name="viewport"
              content="width=device-width, initial-scale=1"
@@ -108,9 +111,9 @@ export const runServer = (
   });
 
   // start the server.
-  console.log("Starting app");
+  console.log(`Starting app in ${appConfig.ssr!} mode.`);
   app
-    .listen(config.port, () => console.log(`Application successfully running on ${config.host}:${config.port}`))
+    .listen(appConfig.port!, () => console.log(`Application successfully running on ${appConfig.host!}:${appConfig.port!}`))
     .on("error", (e) => {
       throw e;
     });

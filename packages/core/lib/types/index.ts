@@ -33,7 +33,7 @@
     * The character set. (i.e utf-8)
     */
  
-     charset: string;
+     charset?: string;
  
      /**
       * host
@@ -41,7 +41,7 @@
       * The server host
       */
  
-     host: string;
+     host?: string;
  
      /**
       * lang
@@ -49,7 +49,7 @@
       * The language to use. (i.e 'en')
       */
  
-     lang: string;
+     lang?: string;
  
      /**
       * port
@@ -57,7 +57,7 @@
       * the server port to listen to.
       */
  
-     port: number;
+     port?: number;
  
      /**
       * env
@@ -65,7 +65,7 @@
       * The environment the server will run on.
       */
  
-     env: Env;
+     env?: Env;
  
      /**
       * ssr
@@ -73,7 +73,7 @@
       * the SSR mode to use.
       */
  
-     ssr: SSRMode;
+     ssr?: SSRMode;
  }
  
  /**

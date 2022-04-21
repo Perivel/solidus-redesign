@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 import { hydrate } from 'solid-js/web';
-import { Configuration, Capsule } from '@solidus-js/core';
+import { Configuration, Capsule, resolveConfig } from '@solidus-js/core';
 import { useServer } from '@solidus-js/utilities';
 
 /**
@@ -12,9 +12,10 @@ import { useServer } from '@solidus-js/utilities';
  * @param config The configuration object.
  */
 
-export const runClient = (App: Component, config: Configuration): () => void => {
+export const runClient = (App: Component, config: Configuration = {}): () => void => {
+    const appConfig = resolveConfig(config);
     const server = useServer();
-    const ClientComponent = () => <Capsule url={server()?.url || '/'} tags={[]} env={config.env}>
+    const ClientComponent = () => <Capsule url={server()?.url || '/'} tags={[]} env={appConfig.env!}>
         <App />
     </Capsule>;
     
