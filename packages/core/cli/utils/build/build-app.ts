@@ -14,6 +14,8 @@
  } from '@swindle/filesystem';
  import {
      rollup, 
+     watch,
+     RollupWatchOptions,
      RollupOptions, 
      RollupBuild,
      RollupError,
@@ -26,7 +28,6 @@
  import json from "@rollup/plugin-json";
  import typescript from 'rollup-plugin-typescript2';
  import styles from 'rollup-plugin-styles';
- // import copy from 'rollup-plugin-copy';
  import nodePolyfill from 'rollup-plugin-polyfill-node';
  import image from '@rollup/plugin-image';
  import commonjs from '@rollup/plugin-commonjs';
@@ -186,7 +187,7 @@
   */
  
  const loadBuildConfigurationOptions = (
-     tsconfigOptions: object, 
+     //tsconfigOptions: object, 
      deps: string[], 
      devDeps: string[], 
      root: Path,
@@ -205,16 +206,6 @@
          'solid-js/web'
      ].filter(dep => dep !== 'solid-app-router');
      const fmt = container.get(StringFormatter);
- 
-    //  const globals: Record<string, string> = {};
-    //  deps.forEach(dep => {
-    //      globals[dep] = fmt.camelCase(dep);
-    //  });
-    //  globals['@solidus-js/core'] = fmt.camelCase('@solidus-js/core');
-    //  globals['@solidus-js/client'] = fmt.camelCase('@solidus-js/client');
-    //  globals['@solidus-js/server'] = fmt.camelCase('@solidus-js/server');
-    //  globals['@solidus-js/utilities'] = fmt.camelCase('@solidus-js/utilities');
-    //  globals['solid-js/web'] = fmt.camelCase('solid-js/web');
  
      const tsConfigOverrides = {
          declaration: true,
@@ -296,6 +287,117 @@
  
      return [clientConfig, serverConfig];
  }
+
+ /**
+  * loadWatchConfigurationOptions()
+  * 
+  * loads the configuration options for watching the application.
+  * @param deps the project dependencies.
+  * @param devDeps the development dependencies.
+  * @param root The project root directory.
+  * @returns A RollupOptions instance with the appropriate config settigs.
+  */
+ 
+  const loadWatchConfigurationOptions = (
+    deps: string[], 
+    devDeps: string[], 
+    root: Path,
+    outputDir: Path,
+    serverEntryFilePath: Path,
+    clientEntryFilePath: Path,
+    assetsFilePath: Path,
+): RollupWatchOptions[] => {
+    const externals = [
+        ...deps, 
+        ...devDeps,
+        '@solidus-js/core',
+        '@solidus-js/client',
+        '@solidus-js/server',
+        '@solidus-js/utilities',
+        'solid-js/web'
+    ].filter(dep => dep !== 'solid-app-router');
+    const fmt = container.get(StringFormatter);
+
+    const tsConfigOverrides = {
+        declaration: true,
+        declarationDir: Path.FromSegments(outputDir, 'types').toString()
+    }
+
+    const tsPluginOptions = {
+        tsconfig: Path.FromSegments(root, 'tsconfig.json').toString(),
+        check: true,
+        clean: true,
+        abortOnError: true,
+        rollupCommonJSResolveHack: false,
+        useTsconfigDeclarationDir: true,
+        cwd: root.toString(),
+        tsconfigOverride: tsConfigOverrides,
+    };
+
+
+    const serverConfig = <RollupOptions>{
+        input: serverEntryFilePath.toString(),
+        output: [
+            {
+                file: Path.FromSegments(outputDir, 'index.js').toString(),
+                format: 'es',
+                //globals: globals,
+            }
+        ],
+        external: externals,
+        plugins: [
+            nodePolyfill(),
+            nodeResolve({
+                exportConditions: ["solid"],
+                extensions: [".js", ".jsx", ".ts", ".tsx"],
+            }),
+            typescript(tsPluginOptions),
+            commonjs(),
+            babel({
+                babelHelpers: "bundled",
+                presets: [["solid", { generate: "ssr", hydratable: true }]],
+                exclude: "node_modules/**",
+                extensions: [".js", ".jsx", ".ts", ".tsx"],
+            }),
+            json(),
+            styles(),
+            image(),
+        ],
+        preserveEntrySignatures: false,
+        treeshake: true,
+    };
+
+    const clientConfig = <RollupOptions>{
+        input: clientEntryFilePath.toString(),
+        output: [
+            {
+                file: Path.FromSegments(outputDir, 'public/scripts/client.js').toString(),
+                format: 'es',
+            },
+        ],
+        plugins: [
+            nodePolyfill(),
+            nodeResolve({
+                exportConditions: ["solid"],
+                extensions: [".js", ".jsx", ".ts", ".tsx"],
+            }),
+            typescript(tsPluginOptions),
+            commonjs(),
+            babel({
+                babelHelpers: "bundled",
+                presets: [["solid", { generate: "dom", hydratable: true }]],
+                extensions: [".js", ".jsx", ".ts", ".tsx"],
+            }),
+            json(),
+            styles(),
+            image(),
+        ],
+        preserveEntrySignatures: false,
+        treeshake: false,
+    };
+
+    return [clientConfig, serverConfig];
+}
  
  /**
  * generateBundle()
@@ -331,7 +433,6 @@
      const tsconfig = await loadTsconfig(buildOptions.root);
      const deps = await loadDependenciesList();
      const rollupOptions = loadBuildConfigurationOptions(
-         tsconfig, 
          deps.deps, 
          deps.dev, 
          buildOptions.root!, 
@@ -377,4 +478,52 @@
          }
          throw new SolidusBuildException(error.message);
      }
+ };
+
+ /**
+  * watchApp()
+  * 
+  * watchApp() builds the app, and watches the source for changes.
+  * @param options the buikd options.
+  */
+
+ export const watchApp = async (options: BuildOptions = {}): Promise<VoidAsyncFn> => {
+     // start dev server
+
+     // listen for rollup build cycles
+
+     // build the initial app.
+
+     // run the initial app with child_process.swawn.
+
+     // on new rollup build, shut down app (child.kill('SIGINT')) and restart. Send server side event to tell browser to reload.
+     const buildOptions = resolveBuildOptions(options);
+     const deps = await loadDependenciesList();
+     const watchOptions = loadWatchConfigurationOptions(
+         deps.deps, 
+         deps.dev, 
+         buildOptions.root!, 
+         buildOptions.outputDir!, 
+         buildOptions.serverEntryPoint!, 
+         buildOptions.clientEntryPoint!,
+         buildOptions.assetsDir!
+     );
+
+     const watcher = watch(watchOptions);
+     watcher.on('event', event => {
+        
+     });
+
+     watcher.on('change', event => {
+
+     });
+
+     watcher.on('close', () => {
+
+     });
+
+     watcher.on('restart', () => {
+
+     });
+     return watcher.close;
  };
