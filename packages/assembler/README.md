@@ -1,11 +1,2 @@
-# `@solidus-js/assembler`
-
-> TODO: description
-
-## Usage
-
-```
-const assembler = require('@solidus-js/assembler');
-
-// TODO: DEMONSTRATE API
-```
+# @solidus-js/assembler
+Solidus-js/Assembler provides utilities for building SolidusJS applicatioons.
