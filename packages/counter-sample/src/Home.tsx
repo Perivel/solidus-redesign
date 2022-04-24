@@ -1,4 +1,4 @@
-import { Component, createSignal } from 'solid-js';
+import { Component, createEffect, createMemo, createSignal } from 'solid-js';
 import { Title } from 'solid-meta';
 import { useNavigate } from 'solid-app-router';
 
@@ -8,6 +8,17 @@ const Home: Component = () => {
 
   const increment = () => setCount(count() + 1);
   const decrement = () => setCount(count() - 1);
+  const [message, setMessage] = createSignal("Even");
+  
+  createEffect(() => {
+    const rem = count() / 2;
+    if (rem === 0) {
+      setMessage("Even");
+    }
+    else {
+      setMessage("Odd");
+    }
+  });
 
   const goToAbout = () => navigate('/about');
 
@@ -19,6 +30,7 @@ const Home: Component = () => {
       <header class="header">
         <img src='./logo.svg' class="logo" alt="logo" />
         <p>Count: {count()}</p>
+        <p>Odd or Even: {message()}</p>
         <button class="btn" onClick={increment}>Increment</button>
         <button class="btn" onClick={decrement}>Decrement</button>
         <button class="btn" onClick={goToAbout}>Learn More</button>
