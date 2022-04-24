@@ -2,9 +2,16 @@ import { Command } from './../utils/command/command.type';
 import { Path } from '@swindle/filesystem';
 import { Process } from '@swindle/os';
 import { CommandStatus } from './../utils/command/command-status';
-import { buildApp } from './../utils/build/build-app';
+import { buildApp } from '@solidus-js/assembler';
 import container from './../utils/container';
 import { Logger } from '../utils/logger/logger';
+
+/**
+ * runBuuild()
+ * 
+ * builds the application.
+ * @returns CommandStatus indicating the status of the command (success or failure).
+ */
 
 export const runBuild: Command = async () => {
     const root = Process.Cwd();
