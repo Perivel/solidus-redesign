@@ -33,6 +33,17 @@ export class Logger implements LoggerInterface {
     }
 
     /**
+     * log()
+     * 
+     * logs a regular message with no formatting.
+     * @param message the message to log.
+     */
+
+    public log(message: string): void {
+        console.log(chalk.green(message));
+    }
+
+    /**
      * warn()
      * 
      * logs a warning.

@@ -4,5 +4,6 @@ export enum CommandType {
     Build = 'build',
     Dev = 'dev',
     Help = '-h',
-    Start = 'start'
+    Start = 'start',
+    Version = '-v'
 }

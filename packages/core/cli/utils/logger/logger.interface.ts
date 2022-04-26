@@ -4,7 +4,7 @@
  * A logger interface.
  */
 
- export interface LoggerInterface {
+export interface LoggerInterface {
 
     /**
      * info()
@@ -23,6 +23,15 @@
      */
 
     error(message: string): void;
+
+    /**
+     * log()
+     * 
+     * logs a regular message with no formatting.
+     * @param message the message to log.
+     */
+
+    log(message: string): void;
 
     /**
      * warn()

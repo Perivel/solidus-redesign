@@ -16,6 +16,7 @@ import { runHelp } from './commands/run-help';
 import container from './utils/container';
 import { Logger } from './utils/logger/logger';
 import { runStart } from './commands/run-start';
+import { runVersion } from './commands/run-version';
 
 const runCli: Command = async () => {
     const [node, app, ...args] = Process.argv;
@@ -32,6 +33,9 @@ const runCli: Command = async () => {
     }
     else if (cmd === CommandType.Start) {
         return await runStart();
+    }
+    else if (cmd === CommandType.Version) {
+        return await runVersion();
     }
     else {
         // invalid command
