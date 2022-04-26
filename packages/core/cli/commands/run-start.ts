@@ -26,8 +26,8 @@ export const runStart: Command = async () => {
     });
     appProcess.stdout.setEncoding('utf8');
     appProcess.stderr.setEncoding('utf8');
-    appProcess.on('data', (data) => logger.info(data.toString()));
-    appProcess.on('error', (error) => {
+    appProcess.stdout.on('data', (data) => logger.info(data.toString()));
+    appProcess.stderr.on('error', (error) => {
         logger.error(error.message);
         appError = error; 
         appProcess.kill("SIGINT");

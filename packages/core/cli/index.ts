@@ -39,8 +39,8 @@ const runCli: Command = async () => {
     }
     else {
         // invalid command
-        container.get(Logger).error('Invalid command.');
-        return await runHelp();
+        container.get(Logger).error('Invalid command. Run \'solidus -h\' to get a full list of commands.');
+        return CommandStatus.Success;
     }
 }
 
