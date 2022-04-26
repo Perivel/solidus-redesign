@@ -4,7 +4,7 @@
  * run-start.ts defines the runStart command.
  */
 
-import { exec } from 'child_process'
+import { spawn } from 'child_process'
 import { Command } from '../utils/command/command.type';
 import { CommandStatus } from '../utils/command/command-status';
 import container from '../utils/container';
@@ -20,25 +20,20 @@ import { Process } from '@swindle/os';
 export const runStart: Command = async () => {
     const logger = container.get(Logger);
     const serverEntry = Path.FromSegments(Process.Cwd(), 'dist/index.js');
-    
-    try {
-        exec(`node ${serverEntry.toString()}`, (err, stdout, stderr) => {
-            if (err) {
-                throw new Error(err.message);
-            }
-
-            if (stdout) {
-                logger.info(`\n${stdout}`);
-            }
-
-            if (stderr) {
-                logger.error(stderr)
-            }
-        })
-    }
-    catch(e) {
-        const error = e as Error;
+    let appError: Error|undefined = undefined;
+    const appProcess = spawn(`node`, [serverEntry.toString()], {
+        cwd: Process.Cwd().toString()
+    });
+    appProcess.stdout.setEncoding('utf8');
+    appProcess.stderr.setEncoding('utf8');
+    appProcess.on('data', (data) => logger.info(data.toString()));
+    appProcess.on('error', (error) => {
         logger.error(error.message);
+        appError = error; 
+        appProcess.kill("SIGINT");
+    });
+
+    if (appError) {
         return CommandStatus.Error;
     }
 

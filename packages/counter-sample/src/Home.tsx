@@ -11,6 +11,7 @@ const Home: Component = () => {
   const [message, setMessage] = createSignal("Even");
   
   createEffect(() => {
+    console.log('Executing efect in Home Component')
     const rem = count() / 2;
     if (rem === 0) {
       setMessage("Even");
