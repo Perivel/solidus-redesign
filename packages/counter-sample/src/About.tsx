@@ -1,10 +1,11 @@
 import { Component } from 'solid-js';
 import { Title } from 'solid-meta';
-import { useServer } from '@solidus-js/utilities';
+import { useServer, useIsServer } from '@solidus-js/utilities';
 import { useNavigate } from 'solid-app-router';
 
 const About: Component = () => {
     const server = useServer();
+    const isServer = useIsServer();
     const navigate = useNavigate();
     const goHome = () => navigate('/');
     return (
@@ -13,6 +14,7 @@ const About: Component = () => {
             <div class="App">
                 <header class="header">
                     <p>This is the about page for Solidus Counter. Oh, by the way, your IP address is {server()?.ip!}</p>
+                    <p>You accessed me from the { isServer() ? "Server" : "Client"}</p>
                     <button onClick={goHome}>Go Back</button>
                 </header>
             </div>
