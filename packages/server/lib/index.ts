@@ -4,5 +4,5 @@
  * index.ts represents the main Server API.
  */
 
-export * from './middlewate';
+export * from './middleware';
 export * from './run-server';

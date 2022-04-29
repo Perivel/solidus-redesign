@@ -42,7 +42,7 @@ export const resolveConfig = (config: Configuration): Configuration => {
     }
   
     // charset
-    const charset = config.charset || 'urf-8';
+    const charset = config.charset || 'UTF-8';
   
     // lang
     const lang = config.lang || 'en';
