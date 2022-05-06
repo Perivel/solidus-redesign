@@ -6,7 +6,8 @@
 
 import { Component } from 'solid-js';
 import {
-  Configuration
+  Configuration,
+  resolveConfig
 } from "@solidus-js/core";
 import { Middleware } from "./middleware";
 import { HttpServer } from './http-server/http-server';
@@ -26,6 +27,10 @@ export const runServer = (
   config: Configuration = {},
   middleware: Middleware[] = []
 ): void => {
-  const server = new HttpServer(App, config, middleware);
+  const server = new HttpServer(
+    App, 
+    config, 
+    middleware
+  );
   server.start();
 };

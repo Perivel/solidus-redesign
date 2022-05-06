@@ -6,7 +6,7 @@
   "scripts": {
     "start": "solidus start",
     "dev": "solidus dev",
-    "build:app": "solidus build"
+    "build": "solidus build"
   },
   "license": "MIT",
   "devDependencies": {

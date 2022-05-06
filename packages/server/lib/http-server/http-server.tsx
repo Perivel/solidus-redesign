@@ -8,7 +8,8 @@ import {
     Capsule,
     Configuration,
     resolveConfig,
-    TagDescription
+    TagDescription,
+    serverRequest,
 } from '@solidus-js/core';
 import { join } from 'path';
 import express, { Express } from 'express';
@@ -58,11 +59,11 @@ export class HttpServer implements HttpServerInterface {
 
     private _configureResponse(page: string, tags: TagDescription[]): string {
         return `
-        <!doctype html>
-        <html lang=${this._config.lang!}>
+        <!DOCTYPE html>
+        <html lang="${this._config.lang!}">
           <head>
           <link rel="stylesheet" href="index.css" />
-          <meta charset=${this._config.charset!} />
+          <meta charset="${this._config.charset!}" />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1"
@@ -96,12 +97,17 @@ export class HttpServer implements HttpServerInterface {
      */
 
     private _configureRootComponent(root: Component, url: string, ip: string, tags: TagDescription[]): Component<{}> {
-        return () => Capsule({ 
-            url: url,
-            env: this._config.env!,
-            tags: tags,
-            ip: ip
-        });
+        const AppRoot = this._rootComponent;
+        return () => {
+            return <Capsule 
+                env={this._config.env!}
+                tags={tags}
+                url={url}
+                ip={ip}
+            >
+                <AppRoot />
+            </Capsule>
+        }
     }
 
     /**
@@ -125,19 +131,18 @@ export class HttpServer implements HttpServerInterface {
             const App = this._configureRootComponent(this._rootComponent, req.url, req.ip, tags);
 
             if (this._config.ssr! === 'stream') {
-                renderToStream(() => App({})).pipe(res);
+                renderToStream(() => <App />).pipe(res);
             }
             else {
                 let page: string;
 
                 try {
                     if (this._config.ssr! === 'async') {
-                        page = await renderToStringAsync(() => App({}));
+                        page = await renderToStringAsync(() => <App />);
                     }
                     else {
-                        page = renderToString(() => App({}));
+                        page = renderToString(() => <App />);
                     }
-
                     res.send(this._configureResponse(page, tags));
                 }
                 catch(e) {
