@@ -1,10 +1,14 @@
-import { runServer, Middleware } from '@solidus-js/server';
+import { runApp, Middleware } from '@solidus-js/core';
 import App from './App';
-import config from './config';
 
 const logMiddleware: Middleware = async (req, res, next) => {
     console.log(`Received request from ${req.ip}`);
     next();
 }
 
-runServer(App, config,[logMiddleware]);
+runApp(App, {
+    config: {
+        ssr: 'sync'
+    },
+    middleware: [logMiddleware]
+})

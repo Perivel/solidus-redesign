@@ -11,7 +11,7 @@
  import {
      setEnvironment,
      setServerRequest
- } from './../signals/index';
+ } from './../signals';
  
  /**
   * TagDescription

@@ -21,9 +21,9 @@ export const runBuild: Command = async () => {
         await buildApp({
             root: root,
             assetsDir: Path.FromSegments(root, 'src/assets/'),
-            clientEntryPoint: Path.FromSegments(root, 'src/client.ts'),
+            clientEntryPoint: Path.FromSegments(root, 'src/index.tsx'),
             outputDir: Path.FromSegments(root, 'dist'),
-            serverEntryPoint: Path.FromSegments(root, 'src/server.ts'),
+            serverEntryPoint: Path.FromSegments(root, 'src/index.tsx'),
             onBeforeRollup: async () => {
                 logger.info('Building your application');
             },

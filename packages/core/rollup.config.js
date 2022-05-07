@@ -5,7 +5,6 @@ import jsonPlugin from "@rollup/plugin-json";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import babel from "@rollup/plugin-babel";
 import del from 'rollup-plugin-delete';
-import { camelCase } from 'change-case';
 import { dependencies } from './package.json';
 import commonjs from '@rollup/plugin-commonjs';
 import hashbangPlugin from "rollup-plugin-hashbang";
@@ -14,18 +13,20 @@ import nodePolyfillPlugin from "rollup-plugin-polyfill-node";
 const deps = Object.keys(dependencies);
 
 // core library external dependencies.
-const externals = [
-    ...deps,
+
+const baseExternals = [...deps];
+const browserExternals = [...baseExternals];
+const serverExternals = [
+    ...baseExternals,
+    'solid-js/web',
+    'path'
+];
+const cliExternals = [
+    ...baseExternals,
     'solid-js/web',
     'child_process'
 ];
 
-// core library globals.
-const globals = {};
-deps.forEach(dep => {
-    globals[dep] = camelCase(dep);
-});
-globals['solid-js/web'] = camelCase('solid-js/web');
 
 const tsPluginOptions = {
     tsconfig: './tsconfig.json',
@@ -44,20 +45,20 @@ export default [
     // client library
     {
         input: resolve(__dirname, "lib/index.ts"),
-        treeshake: false,
+        treeshake: true,
         preserveEntrySignatures: true,
-        external: externals,
+        external: browserExternals,
         output: [
             {
                 format: "esm",
                 file: resolve("dist/browser.js"),
-                globals: globals,
             },
         ],
         plugins: [
             del({
                 targets: ['./dist']
             }),
+            nodePolyfillPlugin(),
             nodeResolve({
                 extensions: [".js", ".jsx", ".ts", ".tsx"],
                 ignoreGlobals: false,
@@ -68,7 +69,10 @@ export default [
             babel({
                 extensions: [".js", '.jsx', ".ts", ".tsx"],
                 babelHelpers: "bundled",
-                presets: [["solid", { generate: "dom", hydratable: true }], "@babel/preset-typescript"],
+                presets: [
+                    ["solid", { generate: "dom", hydratable: true }], 
+                    "@babel/preset-typescript"
+                ],
             }),
             jsonPlugin(),
             terser({
@@ -77,23 +81,22 @@ export default [
                 }
             })
         ],
-        treeshake: false
     },
 
     // server library
     {
         input: resolve(__dirname, "lib/index.ts"),
-        treeshake: false,
+        treeshake: true,
         preserveEntrySignatures: true,
-        external: externals,
+        external: serverExternals,
         output: [
             {
                 format: "esm",
                 file: resolve("dist/server.js"),
-                globals: globals,
             },
         ],
         plugins: [
+            nodePolyfillPlugin(),
             nodeResolve({
                 extensions: [".js", ".jsx", ".ts", ".tsx"],
                 ignoreGlobals: false,
@@ -101,6 +104,7 @@ export default [
                 exportConditions: ["solid"]
             }),
             typescriptPlugin(tsPluginOptions),
+            commonjs(),
             babel({
                 extensions: [".js", '.jsx', ".ts", ".tsx"],
                 babelHelpers: "bundled",
@@ -113,17 +117,15 @@ export default [
                 }
             }),
         ],
-        treeshake: false
     },
      // CLI
      {
         input: resolve(__dirname, "cli/index.ts"),
-        external: externals,
+        external: cliExternals,
         output: [
             {
                 file: "./dist/bin/solidus.js",
                 format: "esm",
-                globals: globals,
             },
         ],
         plugins: [

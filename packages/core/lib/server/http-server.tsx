@@ -4,13 +4,6 @@
  * server/http-server.ts defines the HttpServer.
  */
 
-import {
-    Capsule,
-    Configuration,
-    resolveConfig,
-    TagDescription,
-    serverRequest,
-} from '@solidus-js/core';
 import { join } from 'path';
 import express, { Express } from 'express';
 import { Component } from 'solid-js';
@@ -22,7 +15,15 @@ import {
 } from 'solid-js/web';
 import { renderTags } from 'solid-meta';
 import { HttpServerInterface } from './http-server.interface';
-import { Middleware } from '../middleware';
+import {
+    Configuration,
+    Middleware
+} from './../types';
+import {
+    Capsule,
+    TagDescription
+} from './../components';
+import { resolveConfig } from './../utilities'
 
 /**
  * HttpServer

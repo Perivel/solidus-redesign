@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 import { Title } from 'solid-meta';
-import { useServer, useIsServer } from '@solidus-js/utilities';
+import { useServer, useIsServer } from '@solidus-js/core';
 import { useNavigate } from 'solid-app-router';
 
 const About: Component = () => {

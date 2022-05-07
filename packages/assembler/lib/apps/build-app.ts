@@ -198,14 +198,10 @@ const loadBuildConfigurationOptions = (
 ): RollupOptions[] => {
     const externals = [
         ...deps,
-        ...devDeps,
+        '@solidus-js/assembler',
         '@solidus-js/core',
-        '@solidus-js/client',
-        '@solidus-js/server',
-        '@solidus-js/utilities',
         'solid-js/web'
     ].filter(dep => dep !== 'solid-app-router');
-    const fmt = container.get(StringFormatter);
 
     const tsConfigOverrides = {
         declaration: true,
@@ -230,7 +226,7 @@ const loadBuildConfigurationOptions = (
             {
                 file: Path.FromSegments(outputDir, 'index.js').toString(),
                 format: 'es',
-                //globals: globals,
+                
             }
         ],
         external: externals,
@@ -258,6 +254,7 @@ const loadBuildConfigurationOptions = (
 
     const clientConfig = <RollupOptions>{
         input: clientEntryFilePath.toString(),
+        external: ['@solidus-js/assembler'],
         output: [
             {
                 file: Path.FromSegments(outputDir, 'public/scripts/client.js').toString(),
@@ -309,18 +306,15 @@ const loadWatchConfigurationOptions = (
 ): RollupWatchOptions[] => {
     const externals = [
         ...deps,
-        ...devDeps,
+        '@solidus-js/assembler',
         '@solidus-js/core',
-        '@solidus-js/client',
-        '@solidus-js/server',
-        '@solidus-js/utilities',
+        '@solidus-js/dev-server',
         'solid-js/web'
     ].filter(dep => dep !== 'solid-app-router');
-    const fmt = container.get(StringFormatter);
 
     const tsConfigOverrides = {
         declaration: true,
-        declarationDir: Path.FromSegments(outputDir, 'types').toString()
+        declarationDir: Path.FromSegments(outputDir, 'types').toString(),
     }
 
     const tsPluginOptions = {

@@ -4,18 +4,19 @@
  * primitives/index.ts defines common primitives.
  */
 
-import {
+ import {
     Accessor,
-    createSignal,
-    createEffect
+    createSignal
 } from 'solid-js';
 import { isServer } from 'solid-js/web';
 import {
     environment,
     serverRequest,
+} from './../signals';
+import {
     Env,
     ServerRequest
-} from '@solidus-js/core';
+} from './../types';
 
 /**
  * onServerRender()

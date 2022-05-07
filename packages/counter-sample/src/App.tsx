@@ -1,5 +1,5 @@
 import { Component } from 'solid-js';
-import { useServer } from '@solidus-js/utilities';
+import { useServer } from '@solidus-js/core';
 import { useRoutes, Router, RouteDefinition } from 'solid-app-router';
 import Home from './Home';
 import About from './About';

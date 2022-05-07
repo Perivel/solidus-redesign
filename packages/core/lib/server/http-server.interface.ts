@@ -4,7 +4,7 @@
  * server/http-server.ts defines the interface for an http server.
  */
 
-export interface HttpServerInterface {
+ export interface HttpServerInterface {
 
     /**
      * start()
