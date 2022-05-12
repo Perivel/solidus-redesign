@@ -41,45 +41,45 @@ const tsPluginOptions = {
 
 export default [
     // client library
-    {
-        input: resolve(__dirname, "lib/index.ts"),
-        treeshake: false,
-        preserveEntrySignatures: true,
-        external: externals,
-        output: [
-            {
-                format: "esm",
-                file: resolve("dist/browser.js"),
-                globals: globals,
-            },
-        ],
-        plugins: [
-            del({
-                targets: ['./dist']
-            }),
-            nodePolyfillPlugin(),
-            nodeResolve({
-                extensions: [".js", ".jsx", ".ts", ".tsx"],
-                ignoreGlobals: false,
-                exportConditions: ["solid"],
-                exclude: ['node_modules/**'],
-            }),
-            typescriptPlugin(tsPluginOptions),
-            commonjs(),
-            babel({
-                extensions: [".js", '.jsx', ".ts", ".tsx"],
-                babelHelpers: "bundled",
-                presets: [["solid", { generate: "dom", hydratable: true }], "@babel/preset-typescript"],
-            }),
-            jsonPlugin(),
-            terser({
-                format: {
-                    comments: false
-                }
-            })
-        ],
-        treeshake: false
-    },
+    // {
+    //     input: resolve(__dirname, "lib/index.ts"),
+    //     treeshake: false,
+    //     preserveEntrySignatures: true,
+    //     external: externals,
+    //     output: [
+    //         {
+    //             format: "esm",
+    //             file: resolve("dist/browser.js"),
+    //             globals: globals,
+    //         },
+    //     ],
+    //     plugins: [
+    //         del({
+    //             targets: ['./dist']
+    //         }),
+    //         nodePolyfillPlugin(),
+    //         nodeResolve({
+    //             extensions: [".js", ".jsx", ".ts", ".tsx"],
+    //             ignoreGlobals: false,
+    //             exportConditions: ["solid"],
+    //             exclude: ['node_modules/**'],
+    //         }),
+    //         typescriptPlugin(tsPluginOptions),
+    //         commonjs(),
+    //         babel({
+    //             extensions: [".js", '.jsx', ".ts", ".tsx"],
+    //             babelHelpers: "bundled",
+    //             presets: [["solid", { generate: "dom", hydratable: true }], "@babel/preset-typescript"],
+    //         }),
+    //         jsonPlugin(),
+    //         terser({
+    //             format: {
+    //                 comments: false
+    //             }
+    //         })
+    //     ],
+    //     treeshake: false
+    // },
 
     // server library
     {

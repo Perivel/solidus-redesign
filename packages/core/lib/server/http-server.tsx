@@ -5,7 +5,7 @@
  */
 
 import { join } from 'path';
-import express, { Express } from 'express';
+import Fastify, { FastifyInstance } from 'fastify';
 import { Component } from 'solid-js';
 import {
     renderToStringAsync,
@@ -33,7 +33,7 @@ import { resolveConfig } from './../utilities'
 export class HttpServer implements HttpServerInterface {
 
     private readonly _rootComponent: Component;
-    private readonly _server: Express;
+    private readonly _server: FastifyInstance;
     private readonly _middleware: Middleware[];
     private readonly _config: Configuration;
 
@@ -45,7 +45,7 @@ export class HttpServer implements HttpServerInterface {
         this._rootComponent = root;
         this._middleware = middleware;
         this._config = resolveConfig(config);
-        this._server = express();
+        this._server = Fastify();
         this._setupServer();
     }
 
