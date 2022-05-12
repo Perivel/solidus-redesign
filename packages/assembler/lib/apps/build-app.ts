@@ -237,7 +237,9 @@ const loadBuildConfigurationOptions = (
                 extensions: [".js", ".jsx", ".ts", ".tsx"],
             }),
             typescript(tsPluginOptions),
-            commonjs(),
+            commonjs({
+                include: ['node_modules/**']
+            }),
             babel({
                 babelHelpers: "bundled",
                 presets: [["solid", { generate: "ssr", hydratable: true }]],
@@ -268,7 +270,9 @@ const loadBuildConfigurationOptions = (
                 extensions: [".js", ".jsx", ".ts", ".tsx"],
             }),
             typescript(tsPluginOptions),
-            commonjs(),
+            commonjs({
+                include: ['node_modules/**']
+            }),
             babel({
                 babelHelpers: "bundled",
                 presets: [["solid", { generate: "dom", hydratable: true }]],
