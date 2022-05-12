@@ -9,6 +9,7 @@ import { Component } from 'solid-js';
 import { isServer, hydrate } from 'solid-js/web';
 import {
     Configuration,
+    CorsOptions,
     Middleware
 } from './../types';
 import { resolveConfig } from './../utilities';
@@ -25,6 +26,7 @@ import { HttpServer } from './../server/http-server';
 export interface ServerOptions {
     config?: Configuration;
     middleware?: Middleware[];
+    cors?: CorsOptions;
 }
 
 /**
@@ -59,12 +61,14 @@ const runClient = (App: Component, config: Configuration = {}): VoidSyncFn => {
 const runServer = (
     App: Component,
     config: Configuration = {},
+    cors: CorsOptions = {},
     middleware: Middleware[] = []
 ): void => {
     const server = new HttpServer(
         App,
         config,
-        middleware
+        middleware,
+        cors,
     );
     server.start();
 };
@@ -83,10 +87,11 @@ export const runApp = (
 ): VoidSyncFn | void => {
     const config = options.config ? options.config : {};
     const middleware = options.middleware ? options.middleware : [];
+    const cors = options.cors ? options.cors : {};
 
     if (isServer) {
         // We are in the server. So, we run the server side code.
-        runServer(App, config, middleware);
+        runServer(App, config, cors, middleware);
     }
     else {
         // we are in the client. So, we want to hydrate the app.

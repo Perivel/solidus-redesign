@@ -4,11 +4,11 @@
  * types/index.ts contains definitions for commonly used types.
  */
 
- import {
-     Request as ExpressReq, 
-     Response as ExpressRes, 
-     NextFunction as ExpressNext 
-} from 'express';
+import { 
+    IncomingMessage,
+    ServerResponse
+} from 'http';
+import { IncomingMessageExtended } from 'middie';
 
 /**
  * Env
@@ -124,9 +124,9 @@ export interface ServerRequest {
  * middleware.ts defines types and interfaces for server middleware.
  */
 
-export type Request = ExpressReq;
-export type Response = ExpressRes;
-export type NextFn = ExpressNext;
+export type Request = IncomingMessage & IncomingMessageExtended;
+export type Response = ServerResponse;
+export type NextFn = (err?: any) => void;
 
  /**
   * Middleware
@@ -135,3 +135,23 @@ export type NextFn = ExpressNext;
   */
  
  export type Middleware = (req: Request, res: Response, next: NextFn) => Promise<void>;
+
+ /**
+  * CorsOptions
+  * 
+  * Options for setting up Cors.
+  */
+
+ export interface CorsOptions {
+    allowHeaders?: string[];
+    credentials?: boolean;
+    exposeHeaders?: string|string[];
+    hideOptionsRoute?: boolean;
+    maxAge?: number;
+    methods?: string|string[];
+    optionsSuccessStatus?: number;
+    origin?: string[];
+    preflight?: boolean;
+    preflightContinue?: boolean;
+    strictPreflight?: boolean;
+}

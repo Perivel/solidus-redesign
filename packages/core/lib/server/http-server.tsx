@@ -6,6 +6,9 @@
 
 import { join } from 'path';
 import Fastify, { FastifyInstance } from 'fastify';
+import Cors from '@fastify/cors';
+import Static from '@fastify/static';
+import Middie from 'middie';
 import { Component } from 'solid-js';
 import {
     renderToStringAsync,
@@ -17,13 +20,14 @@ import { renderTags } from 'solid-meta';
 import { HttpServerInterface } from './http-server.interface';
 import {
     Configuration,
+    CorsOptions,
     Middleware
 } from './../types';
 import {
     Capsule,
     TagDescription
 } from './../components';
-import { resolveConfig } from './../utilities'
+import { resolveConfig } from './../utilities';
 
 /**
  * HttpServer
@@ -36,16 +40,21 @@ export class HttpServer implements HttpServerInterface {
     private readonly _server: FastifyInstance;
     private readonly _middleware: Middleware[];
     private readonly _config: Configuration;
+    private readonly _corsOptions?: CorsOptions
 
     constructor(
         root: Component,
         config: Configuration,
         middleware: Middleware[] = [],
+        cors: CorsOptions|undefined = undefined
     ) {
         this._rootComponent = root;
         this._middleware = middleware;
         this._config = resolveConfig(config);
-        this._server = Fastify();
+        this._corsOptions = cors;
+        this._server = Fastify({
+            logger: true,
+        });
         this._setupServer();
     }
 
@@ -100,7 +109,7 @@ export class HttpServer implements HttpServerInterface {
     private _configureRootComponent(root: Component, url: string, ip: string, tags: TagDescription[]): Component<{}> {
         const AppRoot = this._rootComponent;
         return () => {
-            return <Capsule 
+            return <Capsule
                 env={this._config.env!}
                 tags={tags}
                 url={url}
@@ -118,13 +127,43 @@ export class HttpServer implements HttpServerInterface {
      */
 
     private _setupServer(): void {
-        // register middleware.
+        // register middleware if it is defined
         if (this._middleware.length > 0) {
-            this._server.use(...this._middleware);
+             // register middleware.
+            this._server.register(Middie, {
+                hook: 'preHandler',
+            });
+            this._middleware.forEach(middleware => this._server.use(middleware));
+        }
+
+        // set up cors if it is enabled.
+        if (this._corsOptions) {
+            this._server.register(Cors, {
+                // cors settings.
+                allowedHeaders: this._corsOptions?.allowHeaders,
+                credentials: this._corsOptions.credentials,
+                exposedHeaders: this._corsOptions.exposeHeaders,
+                hideOptionsRoute: this._corsOptions.hideOptionsRoute,
+                maxAge: this._corsOptions.maxAge,
+                methods: this._corsOptions.methods,
+                optionsSuccessStatus: this._corsOptions.optionsSuccessStatus,
+                origin: this._corsOptions.origin,
+                preflight: this._corsOptions.preflight,
+                preflightContinue: this._corsOptions.preflightContinue,
+                strictPreflight: this._corsOptions.strictPreflight
+            });
         }
 
         // register public path.
-        this._server.use(express.static(join(process.cwd(), '/dist/public')));
+        this._server.register(Static, {
+            root: join(process.cwd(), '/dist/public'),
+        });
+
+        // register the error handler
+        this._server.setErrorHandler((error, req, res) => {
+            this._server.log.error(error.message);
+            res.status(500).send('Server Error');
+        });
 
         // register the main route.
         this._server.get('*', async (req, res) => {
@@ -132,7 +171,8 @@ export class HttpServer implements HttpServerInterface {
             const App = this._configureRootComponent(this._rootComponent, req.url, req.ip, tags);
 
             if (this._config.ssr! === 'stream') {
-                renderToStream(() => <App />).pipe(res);
+                //renderToStream(() => <App />).pipe(res);
+                throw new Error('Streaming Not Supported');
             }
             else {
                 let page: string;
@@ -144,10 +184,13 @@ export class HttpServer implements HttpServerInterface {
                     else {
                         page = renderToString(() => <App />);
                     }
-                    res.send(this._configureResponse(page, tags));
+                    res
+                        .status(200)
+                        .header('Content-Type', 'text/html')
+                        .send(this._configureResponse(page, tags));
                 }
-                catch(e) {
-                    console.error((e as Error).message);
+                catch (e) {
+                    this._server.log.error((e as Error).message);
                     res.status(500).send("Server Error");
                 }
             }
@@ -161,9 +204,11 @@ export class HttpServer implements HttpServerInterface {
      */
 
     public start(): void {
-        this._server.listen(this._config.port!, () => console.log(`Application successfully running on ${this._config.host!}:${this._config.port!}`))
-        .on('error', (e) => {
-            throw e;
+        this._server.listen(this._config.port!, (error, address) => {
+            if (error) {
+                throw error;
+            }
+            this._server.log.info(`Application successfully running on ${address}`);
         });
     }
 }
