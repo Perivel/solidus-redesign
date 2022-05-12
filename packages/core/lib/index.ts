@@ -17,6 +17,7 @@ export {
 export {
     CharacterSet,
     Configuration,
+    CorsOptions,
     Env,
     ISOLanguageCode,
     Middleware,
