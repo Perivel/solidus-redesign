@@ -4,7 +4,7 @@
  * build-app.ts provides utility functions for building Solidus Applications.
  */
 
-import { StringFormatter, VoidAsyncFn } from '@swindle/core';
+import { VoidAsyncFn } from '@swindle/core';
 import { Process } from '@swindle/os';
 import {
     FileSystem,
@@ -18,9 +18,7 @@ import {
     RollupWatchOptions,
     RollupOptions,
     RollupBuild,
-    RollupError,
-    RollupWatcherEvent
-} from 'rollup';
+    RollupError} from 'rollup';
 import { copy } from 'fs-extra';
 import { SolidusBuildException } from './../exceptions/solidus-build.exception';
 import nodeResolve from "@rollup/plugin-node-resolve";
@@ -31,7 +29,6 @@ import styles from 'rollup-plugin-styles';
 import nodePolyfill from 'rollup-plugin-polyfill-node';
 import image from '@rollup/plugin-image';
 import commonjs from '@rollup/plugin-commonjs';
-import container from './../container';
 
 /**
  * BuildOptions
@@ -238,7 +235,7 @@ const loadBuildConfigurationOptions = (
             }),
             typescript(tsPluginOptions),
             commonjs({
-                include: ['node_modules/**']
+                include: [Path.FromSegments(root, 'node_modules/**').toString()]
             }),
             babel({
                 babelHelpers: "bundled",
@@ -271,7 +268,7 @@ const loadBuildConfigurationOptions = (
             }),
             typescript(tsPluginOptions),
             commonjs({
-                include: ['node_modules/**']
+                include: [Path.FromSegments(root, 'node_modules/**').toString()]
             }),
             babel({
                 babelHelpers: "bundled",
@@ -496,15 +493,6 @@ export const watchApp = async (
     onBuildError = () => { },
     onRestart = () => { }
 ): Promise<VoidAsyncFn> => {
-    // start dev server
-
-    // listen for rollup build cycles
-
-    // build the initial app.
-
-    // run the initial app with child_process.swawn.
-
-    // on new rollup build, shut down app (child.kill('SIGINT')) and restart. Send server side event to tell browser to reload.
     const buildOptions = resolveBuildOptions(options);
     const deps = await loadDependenciesList();
     const watchOptions = loadWatchConfigurationOptions(

@@ -171,8 +171,7 @@ export class HttpServer implements HttpServerInterface {
             const App = this._configureRootComponent(this._rootComponent, req.url, req.ip, tags);
 
             if (this._config.ssr! === 'stream') {
-                //renderToStream(() => <App />).pipe(res);
-                throw new Error('Streaming Not Supported');
+                renderToStream(() => <App />).pipe(res.raw);
             }
             else {
                 let page: string;
