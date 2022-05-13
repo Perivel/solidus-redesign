@@ -184,7 +184,6 @@ const loadDependenciesList = async (root: Path = Process.Cwd()): Promise<{ deps:
  */
 
 const loadBuildConfigurationOptions = (
-    //tsconfigOptions: object, 
     deps: string[],
     devDeps: string[],
     root: Path,
@@ -216,7 +215,6 @@ const loadBuildConfigurationOptions = (
         tsconfigOverride: tsConfigOverrides,
     };
 
-
     const serverConfig = <RollupOptions>{
         input: serverEntryFilePath.toString(),
         output: [
@@ -235,7 +233,9 @@ const loadBuildConfigurationOptions = (
             }),
             typescript(tsPluginOptions),
             commonjs({
-                include: [Path.FromSegments(root, 'node_modules/**').toString()]
+                include: [
+                    Path.FromSegments(root, 'node_modules', '**').toString()
+                ]
             }),
             babel({
                 babelHelpers: "bundled",
@@ -268,7 +268,9 @@ const loadBuildConfigurationOptions = (
             }),
             typescript(tsPluginOptions),
             commonjs({
-                include: [Path.FromSegments(root, 'node_modules/**').toString()]
+                include: [
+                    Path.FromSegments(root, 'node_modules', '**').toString()
+                ]
             }),
             babel({
                 babelHelpers: "bundled",
